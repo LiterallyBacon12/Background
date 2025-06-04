@@ -8,7 +8,23 @@
           \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
 
 ]]--
+function GetGitImage(GithubImg, ImageName)
+    local extension = string.match(GithubImg, "%.([a-zA-Z0-9]+)$") or "png"
+    local validExtensions = { png = true, jpg = true, jpeg = true }
 
+    if not validExtensions[extension:lower()] then
+        error("Unsupported image format: " .. extension)
+    end
+
+    local fileName = ImageName .. "." .. extension
+
+    if not isfile(fileName) then
+        writefile(fileName, game:HttpGet(GithubImg))
+    end
+
+    local imageAsset = (getsynasset or getcustomasset)(fileName)
+    return imageAsset
+end
 local a;
 a = {cache={},load=function(b)
 	if not a.cache[b] then
@@ -1990,24 +2006,6 @@ do
 b.SetBackgroundImage = function(url, customName)
     local asset = GetGitImage(url, customName)
     b.UIElements.Main.Background.ImageLabel.Image = asset
-end
-
-function GetGitImage(GithubImg, ImageName)
-    local extension = string.match(GithubImg, "%.([a-zA-Z0-9]+)$") or "png"
-    local validExtensions = { png = true, jpg = true, jpeg = true }
-
-    if not validExtensions[extension:lower()] then
-        error("Unsupported image format: " .. extension)
-    end
-
-    local fileName = ImageName .. "." .. extension
-
-    if not isfile(fileName) then
-        writefile(fileName, game:HttpGet(GithubImg))
-    end
-
-    local imageAsset = (getsynasset or getcustomasset)(fileName)
-    return imageAsset
 end
 -- Yhh:
 			local x, y, z, A, B = ac.Icon("minimize"), (ac.Icon("maximize"));
